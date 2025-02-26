@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./Components/Auth";
 import Nav from "./Components/Nav";
 import Home from "./Components/Home";
 import QRCard from "./Components/QRCard";
@@ -15,6 +16,7 @@ import RequireAuth from "./Components/RequireAuth";
 
 function App() {
   return (
+    <AuthProvider>
     <div>
       <Nav /> {/* Navigation Menu */}
       <Routes>
@@ -26,6 +28,7 @@ function App() {
         <Route path="*" element={<Nomatch />} />
       </Routes>
     </div>
+    </AuthProvider>
   );
 }
 

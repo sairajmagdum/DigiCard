@@ -584,34 +584,34 @@ const Dashboard = () => {
           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
             <label>Full Name</label>
-            <input type="text" name="fullName" onChange={handleInputChange} required className="w-full bg-gray-700 p-2" />
+            <input type="text" name="fullName" onChange={handleInputChange} required className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
             <label>Date of Birth</label>
-            <DatePicker selected={formData.dateOfBirth} onChange={(date) => setFormData({ ...formData, dateOfBirth: date })} className="mt-3 mb-1 bg-gray-700 " /><br />
+            <DatePicker selected={formData.dateOfBirth} onChange={(date) => setFormData({ ...formData, dateOfBirth: date })} className="mt-3 mb-1 ml-2 bg-gray-700 border-1 border-gray-500 rounded-lg " /><br />
             <label>Gender</label>
-            <select name="gender" onChange={handleInputChange} className="w-full mt-3 bg-gray-700 p-2">
+            <select name="gender" onChange={handleInputChange} className="w-full mt-3 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg">
               <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
             <label>Upload Photo</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full mt-2 bg-gray-700 p-2" />
+            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full mt-2 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
           </section>
 
           {/* Medical Information */}
           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Medical Information</h2>
             <label>Blood Group</label>
-            <input type="text" name="bloodGroup" onChange={handleInputChange} className="w-full bg-gray-700 p-2" />
+            <input type="text" name="bloodGroup" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
             <label>Lab Tests and Results</label>
-            <textarea name="labTests" onChange={handleInputChange} className="w-full bg-gray-700 p-2"></textarea>
+            <textarea name="labTests" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg"></textarea>
           </section>
 
           {/* Emergency Contacts */}
           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Emergency Contacts</h2>
-            <input type="text" placeholder="Name" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} className="w-full bg-gray-700 p-2" />
-            <input type="tel" placeholder="Phone" value={newContact.phone} onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })} className="w-full bg-gray-700 p-2 mt-2" />
+            <input type="text" placeholder="Name" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+            <input type="tel" placeholder="Phone" value={newContact.phone} onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })} className="w-full bg-gray-700 p-2 mt-2 border-1 border-gray-500 rounded-lg" />
             <button type="button" onClick={handleAddContact} className="mt-2 bg-blue-600 px-4 py-2">Add Contact</button>
           </section>
 
