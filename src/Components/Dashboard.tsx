@@ -466,15 +466,200 @@
 
 
 
+// import { v4 as uuidv4 } from "uuid";
+// import React, { useState, useEffect } from "react";
+// import { useNavigate } from "react-router-dom";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+
+// const Dashboard = () => {
+//   const navigate = useNavigate();
+//   const [formData, setFormData] = useState({
+//     fullName: "",
+//     dateOfBirth: null,
+//     gender: "",
+//     profilePicture: null,
+//     bloodGroup: "",
+//     labTests: "",
+//     emergencyContacts: [],
+//     consentAnalytics: false,
+//     privacyPolicy: false,
+//   });
+
+//   const [errors, setErrors] = useState({});
+//   const [photoPreview, setPhotoPreview] = useState(null);
+//   const [newContact, setNewContact] = useState({ name: "", phone: "" });
+
+//   useEffect(() => {
+//     const savedContacts = localStorage.getItem("emergencyContacts");
+//     if (savedContacts) {
+//       setFormData((prev) => ({
+//         ...prev,
+//         emergencyContacts: JSON.parse(savedContacts),
+//       }));
+//     }
+//   }, []);
+
+//   const handleInputChange = (e) => {
+//     const { name, value, type, checked } = e.target;
+//     setFormData((prev) => ({
+//       ...prev,
+//       [name]: type === "checkbox" ? checked : value,
+//     }));
+//     validateField(name, value);
+//   };
+
+//   const handleFileChange = (event) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onloadend = () => {
+//         setPhotoPreview(reader.result);
+//         setFormData((prev) => ({ ...prev, profilePicture: reader.result })); // Save as base64
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
+
+//   const validateField = (name, value) => {
+//     let newErrors = { ...errors };
+//     if (!value) {
+//       newErrors[name] = "This field is required";
+//     } else {
+//       delete newErrors[name];
+//     }
+//     setErrors(newErrors);
+//   };
+
+//   const handleAddContact = (e) => {
+//     e.preventDefault();
+//     if (newContact.name && newContact.phone) {
+//       const updatedContacts = [...formData.emergencyContacts, newContact].slice(
+//         0,
+//         3
+//       );
+//       setFormData((prev) => ({ ...prev, emergencyContacts: updatedContacts }));
+//       localStorage.setItem("emergencyContacts", JSON.stringify(updatedContacts));
+//       setNewContact({ name: "", phone: "" });
+//     }
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     // if (Object.keys(errors).length === 0 && formData.privacyPolicy) {
+//     //   const formattedData = {
+//     //     ...formData,
+//     //     dateOfBirth: formData.dateOfBirth
+//     //       ? formData.dateOfBirth.toISOString().split("T")[0]
+//     //       : "",
+//     //   };
+//     //   localStorage.setItem("formData", JSON.stringify(formattedData));
+//     //   navigate("/qr"); // Replace with actual path
+//     // }
+//     if (!formData.privacyPolicy) {
+//       alert("Please accept the privacy policy.");
+//       return;
+//     }
+  
+//     const uniqueId = uuidv4(); // Generate unique ID
+//     const formattedData = {
+//       ...formData,
+//       dateOfBirth: formData.dateOfBirth
+//         ? formData.dateOfBirth.toISOString().split("T")[0]
+//         : "",
+//     };
+  
+//     localStorage.setItem(`healthData-${uniqueId}`, JSON.stringify(formattedData));
+  
+//     navigate(`/qr-card/${uniqueId}`); // Pass ID in URL
+
+//   };
+
+//   return (
+//     <div className="min-h-screen p-6 bg-gray-900 text-white">
+//       <div className="max-w-4xl mx-auto">
+//         <h1 className="text-3xl font-bold mb-8">Edit Personal Information</h1>
+//         <form onSubmit={handleSubmit} className="space-y-8">
+//           {/* Personal Information */}
+//           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+//             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
+//             <label>Full Name</label>
+//             <input type="text" name="fullName" onChange={handleInputChange} required className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+//             <label>Date of Birth</label>
+//             <DatePicker selected={formData.dateOfBirth} onChange={(date) => setFormData({ ...formData, dateOfBirth: date })} className="mt-3 mb-1 ml-2 bg-gray-700 border-1 border-gray-500 rounded-lg " /><br />
+//             <label>Gender</label>
+//             <select name="gender" onChange={handleInputChange} className="w-full mt-3 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg">
+//               <option value="">Select</option>
+//               <option value="Male">Male</option>
+//               <option value="Female">Female</option>
+//               <option value="Other">Other</option>
+//             </select>
+//             <label>Upload Photo</label>
+//             <input type="file" accept="image/*" onChange={handleFileChange} className="w-full mt-2 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+//           </section>
+
+//           {/* Medical Information */}
+//           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+//             <h2 className="text-xl font-semibold mb-4">Medical Information</h2>
+//             <label>Blood Group</label>
+//             <input type="text" name="bloodGroup" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+//             <label>Lab Tests and Results</label>
+//             <textarea name="labTests" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg"></textarea>
+//           </section>
+
+//           {/* Emergency Contacts */}
+//           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+//             <h2 className="text-xl font-semibold mb-4">Emergency Contacts</h2>
+//             <input type="text" placeholder="Name" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+//             <input type="tel" placeholder="Phone" value={newContact.phone} onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })} className="w-full bg-gray-700 p-2 mt-2 border-1 border-gray-500 rounded-lg" />
+//             <button type="button" onClick={handleAddContact} className="mt-2 bg-blue-600 px-4 py-2">Add Contact</button>
+//           </section>
+
+//           {/* Privacy Policy Agreement */}
+//           <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+//             <input type="checkbox" name="privacyPolicy" onChange={handleInputChange} /> I agree to the privacy policy
+//           </section>
+
+//           <button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded">Generate QR Code</button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
+
 import { v4 as uuidv4 } from "uuid";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useTheme } from "./ThemeContext";
 
-const Dashboard = () => {
+// Define types for form data
+interface EmergencyContact {
+  name: string;
+  phone: string;
+}
+
+interface FormData {
+  fullName: string;
+  dateOfBirth: Date | null;
+  gender: string;
+  profilePicture: string | null;
+  bloodGroup: string;
+  labTests: string;
+  emergencyContacts: EmergencyContact[];
+  consentAnalytics: boolean;
+  privacyPolicy: boolean;
+}
+
+const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const { theme } = useTheme(); // Get current theme
+
+  // State for form data
+  const [formData, setFormData] = useState<FormData>({
     fullName: "",
     dateOfBirth: null,
     gender: "",
@@ -486,10 +671,11 @@ const Dashboard = () => {
     privacyPolicy: false,
   });
 
-  const [errors, setErrors] = useState({});
-  const [photoPreview, setPhotoPreview] = useState(null);
-  const [newContact, setNewContact] = useState({ name: "", phone: "" });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [newContact, setNewContact] = useState<EmergencyContact>({ name: "", phone: "" });
 
+  // Load emergency contacts from local storage
   useEffect(() => {
     const savedContacts = localStorage.getItem("emergencyContacts");
     if (savedContacts) {
@@ -500,28 +686,36 @@ const Dashboard = () => {
     }
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  // Handle input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const isCheckbox = e.target instanceof HTMLInputElement && type === "checkbox";
+
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: isCheckbox ? (e.target as HTMLInputElement).checked : value,
     }));
+
     validateField(name, value);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  // Handle file upload
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhotoPreview(reader.result);
-        setFormData((prev) => ({ ...prev, profilePicture: reader.result })); // Save as base64
+        if (typeof reader.result === "string") {
+          setPhotoPreview(reader.result);
+          setFormData((prev) => ({ ...prev, profilePicture: reader.result as string }));
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const validateField = (name, value) => {
+  // Validate input fields
+  const validateField = (name: string, value: string) => {
     let newErrors = { ...errors };
     if (!value) {
       newErrors[name] = "This field is required";
@@ -531,92 +725,88 @@ const Dashboard = () => {
     setErrors(newErrors);
   };
 
-  const handleAddContact = (e) => {
+  // Handle adding emergency contact
+  const handleAddContact = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (newContact.name && newContact.phone) {
-      const updatedContacts = [...formData.emergencyContacts, newContact].slice(
-        0,
-        3
-      );
+      const updatedContacts = [...formData.emergencyContacts, newContact].slice(0, 3);
       setFormData((prev) => ({ ...prev, emergencyContacts: updatedContacts }));
       localStorage.setItem("emergencyContacts", JSON.stringify(updatedContacts));
       setNewContact({ name: "", phone: "" });
     }
   };
 
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (Object.keys(errors).length === 0 && formData.privacyPolicy) {
-    //   const formattedData = {
-    //     ...formData,
-    //     dateOfBirth: formData.dateOfBirth
-    //       ? formData.dateOfBirth.toISOString().split("T")[0]
-    //       : "",
-    //   };
-    //   localStorage.setItem("formData", JSON.stringify(formattedData));
-    //   navigate("/qr"); // Replace with actual path
-    // }
     if (!formData.privacyPolicy) {
       alert("Please accept the privacy policy.");
       return;
     }
-  
-    const uniqueId = uuidv4(); // Generate unique ID
+
+    const uniqueId = uuidv4();
     const formattedData = {
       ...formData,
-      dateOfBirth: formData.dateOfBirth
-        ? formData.dateOfBirth.toISOString().split("T")[0]
-        : "",
+      dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth.toISOString().split("T")[0] : "",
     };
-  
-    localStorage.setItem(`healthData-${uniqueId}`, JSON.stringify(formattedData));
-  
-    navigate(`/qr-card/${uniqueId}`); // Pass ID in URL
 
+    localStorage.setItem(`healthData-${uniqueId}`, JSON.stringify(formattedData));
+    navigate(`/qr-card/${uniqueId}`);
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-900 text-white">
+    <div className={`${theme === "dark" ? "bg-gray-900 text-white" : "bg-white text-gray-900"} min-h-screen p-6`}>
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold mb-8">Edit Personal Information</h1>
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Personal Information */}
-          <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <section className={`${theme === "dark" ? "bg-gray-800" : "bg-gray-200"} p-6 rounded-lg shadow-md`}>
             <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
             <label>Full Name</label>
-            <input type="text" name="fullName" onChange={handleInputChange} required className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+            <input type="text" name="fullName" onChange={handleInputChange} required className="w-full p-2 border rounded-lg" />
+
             <label>Date of Birth</label>
-            <DatePicker selected={formData.dateOfBirth} onChange={(date) => setFormData({ ...formData, dateOfBirth: date })} className="mt-3 mb-1 ml-2 bg-gray-700 border-1 border-gray-500 rounded-lg " /><br />
+            <DatePicker 
+              selected={formData.dateOfBirth}
+              onChange={(date) => setFormData({ ...formData, dateOfBirth: date as Date })}
+              className="mt-3 mb-1 ml-2 border rounded-lg"
+            /><br />
+
             <label>Gender</label>
-            <select name="gender" onChange={handleInputChange} className="w-full mt-3 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg">
+            <select name="gender" onChange={handleInputChange} className="w-full mt-3 p-2 border rounded-lg">
               <option value="">Select</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
+
             <label>Upload Photo</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full mt-2 bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
+            <input type="file" accept="image/*" onChange={handleFileChange} className="w-full mt-2 p-2 border rounded-lg" />
           </section>
 
           {/* Medical Information */}
-          <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <section className={`${theme === "dark" ? "bg-gray-800" : "bg-gray-200"} p-6 rounded-lg shadow-md`}>
             <h2 className="text-xl font-semibold mb-4">Medical Information</h2>
             <label>Blood Group</label>
-            <input type="text" name="bloodGroup" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
-            <label>Lab Tests and Results</label>
-            <textarea name="labTests" onChange={handleInputChange} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg"></textarea>
+            <input type="text" name="bloodGroup" onChange={handleInputChange} className="w-full p-2 border rounded-lg" />
+
+            <label>Recent Lab Tests</label>
+            <textarea name="labTests" onChange={handleInputChange} className="w-full p-2 border rounded-lg"></textarea>
           </section>
 
           {/* Emergency Contacts */}
-          <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <section className={`${theme === "dark" ? "bg-gray-800" : "bg-gray-200"} p-6 rounded-lg shadow-md`}>
             <h2 className="text-xl font-semibold mb-4">Emergency Contacts</h2>
-            <input type="text" placeholder="Name" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} className="w-full bg-gray-700 p-2 border-1 border-gray-500 rounded-lg" />
-            <input type="tel" placeholder="Phone" value={newContact.phone} onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })} className="w-full bg-gray-700 p-2 mt-2 border-1 border-gray-500 rounded-lg" />
-            <button type="button" onClick={handleAddContact} className="mt-2 bg-blue-600 px-4 py-2">Add Contact</button>
+            {formData.emergencyContacts.map((contact, index) => (
+              <p key={index}>{contact.name} - {contact.phone}</p>
+            ))}
+            <input type="text" placeholder="Contact Name" value={newContact.name} onChange={(e) => setNewContact({ ...newContact, name: e.target.value })} className="w-full mt-2 p-2 border rounded-lg" />
+            <input type="text" placeholder="Phone Number" value={newContact.phone} onChange={(e) => setNewContact({ ...newContact, phone: e.target.value })} className="w-full mt-2 p-2 border rounded-lg" />
+            <button onClick={handleAddContact} className="mt-2 bg-blue-600 text-white px-4 py-2 rounded">Add Contact</button>
           </section>
 
           {/* Privacy Policy Agreement */}
-          <section className="bg-gray-800 p-6 rounded-lg shadow-md">
+          <section className={`${theme === "dark" ? "bg-gray-800" : "bg-gray-200"} p-6 rounded-lg shadow-md`}>
             <input type="checkbox" name="privacyPolicy" onChange={handleInputChange} /> I agree to the privacy policy
           </section>
 
@@ -628,4 +818,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+
 
